@@ -8,28 +8,26 @@ var connection = require("./connection.js");
 // These help avoid SQL injection
 // https://en.wikipedia.org/wiki/SQL_injection
 var orm = {
-    selectAll: function(tableInput, colToSearch, valOfCol) {
-      var queryString = "SELECT * FROM ?? WHERE ?? = ?";
-      connection.query(queryString, [tableInput, colToSearch, valOfCol], function(err, result) {
+    selectAll: function() {
+      var queryString = "SELECT * FROM burgers";
+      connection.query(queryString, function(err, result) {
         if (err) throw err;
         console.log(result);
       });
     },
-    insertOne: function(whatToSelect, table, orderCol) {
-      var queryString = "SELECT ?? FROM ?? ORDER BY ?? DESC";
+    insertOne: function(burger_name) {
+      var queryString = "INSERT INTO burgers (burger_name) VALUES ?;";
       console.log(queryString);
-      connection.query(queryString, [whatToSelect, table, orderCol], function(err, result) {
+      connection.query(queryString, [burger_name], function(err, result) {
         if (err) throw err;
         console.log(result);
       });
     },
-    updateOne: function(tableOneCol, tableTwoForeignKey, tableOne, tableTwo) {
-      var queryString =
-        "SELECT ??, COUNT(??) AS count FROM ?? LEFT JOIN ?? ON ??.??= ??.id GROUP BY ?? ORDER BY count DESC LIMIT 1";
-      // SELECT buyer_name, COUNT(buyer_name) AS count FROM buyers LEFT JOIN pets ON pets.buyer_id = buyers.id GROUP BY buyer_name ORDER BY count DESC LIMIT 1
+    updateOne: function(id) {
+      var queryString = "UPDATE burgers SET devoured = 1 WHERE id = ?;";
       connection.query(
-        queryString,
-        [tableOneCol, tableOneCol, tableOne, tableTwo, tableTwo, tableTwoForeignKey, tableOne, tableOneCol],
+        queryString, 
+        [id],
         function(err, result) {
           if (err) throw err;
           console.log(result);

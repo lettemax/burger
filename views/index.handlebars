@@ -1,24 +1,90 @@
-<h1>Burger-a-thon!</h1>
+{{!-- <div class="container"> --}}
+  <h1>Burger-a-thon!</h1>
+  <h2>Make burgers and eat them!!!</h2>
+  <div id="platter">
+    <ul>
+      {{#each burgers}}
+        {{#unless devoured}}
+          <li>
+            <p>
+              {{this.burger_name}}
+              <button data-burgerid="{{this.id}}" class="devour-burger">Devour burger!</button>
+            </p>
+          </li>
+        {{/unless}}
+      {{/each}}
+    </ul>
+  </div>
+  
+  <div id="kitchen">
+    <h2>Make a Burger</h2>
+    <form class="create-form" id="create-burger">
 
-<h2>Make burgers and eat them!!!</h2>
+      <div class="form-group">
+        <label for="burger">Burger Name:</label>
+        <input type="text" id="burger" name="burger">
+      </div>
 
-<ul>
-  {{#each burgers}}
-    {{!-- {{#unless devoured}}
-      {{> cats/cat-block sleep=true}}
-    {{/unless}} --}}
-  {{/each}}
-</ul>
-
-
-
-<h2>Make a Burger</h2>
-<form class="create-form">
-
-  <div class="form-group">
-    <label for="burger">Burger Name:</label>
-    <input type="text" id="burger" name="name">
+      <button type="submit">Make Burger</button>
+    </form>
   </div>
 
-  <button type="submit">Make Burger</button>
-</form>
+  <div id="dirty-dishes">
+    <h2>Devoured burgers</h2>
+    <ul>
+      {{#each burgers}}
+        {{#if devoured}}
+          <li>
+            <p>
+              {{this.burger_name}}
+            </p>
+          </li>
+        {{/if}}
+      {{/each}}
+    </ul>
+  </div>
+    
+{{!-- </div> --}}
+
+<script type="text/javascript">
+  $(".devour-burger").on("click", function(event) {
+    // Get the ID from the button.
+    // This is shorthand for $(this).attr("data-burgerid")
+    var id = $(this).data("burgerid");
+
+    // Send the DELETE request.
+    $.ajax("/burgers/" + id, {
+      type: "UPDATE"
+    }).then(
+      function() {
+        console.log("devoured burger #", id);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+
+  $("#create-burger").on("submit", function(event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    // [name=burger] will find an element with a "name" attribute equal to the string "burger"
+    var newBurger = {
+      burger_name: $("#burger [name=burger]").val().trim()
+    };
+
+    // Send the POST request.
+    $.ajax("/burgers", {
+      type: "POST",
+      data: newBurger
+    }).then(
+      function() {
+        console.log("created new burger: " + newBurger.burger_name);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+
+</script>
+
