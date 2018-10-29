@@ -1,7 +1,8 @@
 {{!-- <div class="container"> --}}
   <h1>Burger-a-thon!</h1>
   <h2>Make burgers and eat them!!!</h2>
-  <div id="platter">
+  <div id="platter" style="width: 30%; float: left">
+    <h2>Platter</h2>
     <ul>
       {{#each burgers}}
         {{#unless devoured}}
@@ -16,7 +17,7 @@
     </ul>
   </div>
   
-  <div id="kitchen">
+  <div id="kitchen" style="width: 30%; float: left">
     <h2>Make a Burger</h2>
     <form class="create-form">
 
@@ -29,7 +30,7 @@
     </form>
   </div>
 
-  <div id="dirty-dishes">
+  <div id="dirty-dishes" style="width: 30%; float: left">
     <h2>Devoured burgers</h2>
     <ul>
       {{#each burgers}}
