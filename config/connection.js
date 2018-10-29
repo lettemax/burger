@@ -1,8 +1,11 @@
 var mysql = require("mysql");
 var connection;
 
+var gotJaws = false;
+
 if (process.env.JAWSDB_URL) {
   connection = mysql.createConnection(process.env.JAWSDB_URL);
+  gotJaws = true;
 } else {
 
   connection = mysql.createConnection({
@@ -20,6 +23,8 @@ connection.connect(function(err) {
     return;
   }
   console.log("connected as id " + connection.threadId);
+  console.log("JAWSDB_URL: " + process.env.JAWSDB_URL);
+  console.log("got jaws: " + gotJaws);
 });
 
 module.exports = connection;
